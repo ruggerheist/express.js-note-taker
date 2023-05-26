@@ -1,6 +1,10 @@
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
+const crypto = require('crypto');
+const notesDb = require('./db/db.json');
+
+
 
 const app = express();
 const PORT = 3001;
@@ -19,21 +23,36 @@ app.get('/api/notes', (req, res) => {
   res.sendFile(path.join(__dirname, './db/db.json'))
 });
 
+
+
 app.post('/api/notes', (req, res) => {
-   fs.readFile('./db/db.json', 'utf8', (err, data) => {
-    if (err) {
-      console.error(err);
-    } else {
-        console.log(data);
-      const parsedData = JSON.parse(data);
-      req.body.id = parsedData.length + 1
-      console.log(req.body);
-      parsedData.push(req.body);
-      console.log(parsedData);
-     // writeToFile(file, parsedData);
-    }
+  const { title, text, id} = req.body
+
+if (title && text && id) {
+  const newNote = {
+    title,
+    text,
+    id: crypto.randomUUID(),
+  }
+};
+  notesDb.push(newNote);
+  const noteString = JSON.stringify(notesDb);
+  //  fs.readFile('./db/db.json', 'utf8', (err, data) => {
+  //   if (err) {
+  //     console.error(err);
+  //   } else {
+  //       console.log(data);
+  //     const parsedData = JSON.parse(data);
+  //     console.log(req.body);
+  //     parsedData.push(req.body());
+  //     console.log(parsedData);
+      fs.writeToFile('./db/db.json', noteString, (err) => 
+      err
+        ? console.error(err)
+        : console.log(`New Note Has Been Saved`)
+      )
+    
   });
-});
 
 app.listen(PORT, () =>
   console.log(`Example app listening at http://localhost:${PORT}`)
