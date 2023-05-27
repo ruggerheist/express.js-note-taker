@@ -11,6 +11,8 @@ const PORT = 3001;
 
 // TODO: Invoke app.use() and serve static files from the '/public' folder
 app.use(express.static('public'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: true}));
 
 app.get('/', (req, res) => res.send(''));
 
@@ -20,22 +22,24 @@ app.get('/notes', (req, res) =>
 
 // TODO: Create a route that will serve up the `public/paths.html` page
 app.get('/api/notes', (req, res) => {
-  res.sendFile(path.join(__dirname, './db/db.json'))
+  res.json(notesDb);
 });
 
 
 
 app.post('/api/notes', (req, res) => {
-  const { title, text, id} = req.body
+  const { title, text } = req.body
 
-if (title && text && id) {
+if (title && text) {
   const newNote = {
     title,
     text,
     id: crypto.randomUUID(),
-  }
-};
+  };
+  console.log(newNote);
   notesDb.push(newNote);
+  res.json(newNote);
+  console.log(notesDb);
   const noteString = JSON.stringify(notesDb);
   //  fs.readFile('./db/db.json', 'utf8', (err, data) => {
   //   if (err) {
@@ -46,13 +50,12 @@ if (title && text && id) {
   //     console.log(req.body);
   //     parsedData.push(req.body());
   //     console.log(parsedData);
-      fs.writeToFile('./db/db.json', noteString, (err) => 
-      err
-        ? console.error(err)
-        : console.log(`New Note Has Been Saved`)
-      )
-    
-  });
+      fs.writeFile('./db/db.json', noteString, (err) => 
+      err ? console.error(err) : console.log(`New Note Has Been Saved`)              
+    )
+    console.log(noteString);
+  };    
+});
 
 app.listen(PORT, () =>
   console.log(`Example app listening at http://localhost:${PORT}`)

@@ -3,7 +3,6 @@ let noteText;
 let saveNoteBtn;
 let newNoteBtn;
 let noteList;
-const crypto = require('crypto');
 
 if (window.location.pathname === '/notes') {
   noteTitle = document.querySelector('.note-title');
