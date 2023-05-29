@@ -57,6 +57,18 @@ if (title && text) {
   };    
 });
 
+app.delete(`/api/notes/:id`, (req, res) => {
+ const { id } = req.params;
+ const noteIndex = notesDb.findIndex(notes => notes.id == id);
+ notesDb.splice(noteIndex, 1);
+ const noteString = JSON.stringify(notesDb);  
+  console.log('Note Deleted');
+  fs.writeFile('./db/db.json', noteString, (err) => {
+      err ? console.error(err) : console.log(`New Note Has Been Saved`)              
+  res.send()
+});
+});
+
 app.listen(PORT, () =>
   console.log(`Example app listening at http://localhost:${PORT}`)
 );
