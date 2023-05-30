@@ -11,7 +11,7 @@
 ## Installation Instructions
   - The application is hosted on Heroku and can be run from there.
 ## Usage Information
-  - Link to live application  
+  - [Link to live application](https://express-js-note-take.herokuapp.com/)  
 ## License
   - [License: MIT](https://opensource.org/licenses/MIT)
 ## Contribution Guidelines
